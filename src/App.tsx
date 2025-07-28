@@ -8,11 +8,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router";
+import { LoginPage } from './pages/(public)/LoginPage';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello World</div>,
+    element: <LoginPage/>,
   },
   {
     path: "/about",
