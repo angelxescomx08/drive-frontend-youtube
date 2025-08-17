@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useLogin } from "@/modules/auth/hooks/useLogin"
 import { LogIn } from "lucide-react"
 
 export const LoginPage = () => {
+
+  const { form, loginMutation, onSubmit, onError } = useLogin()
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <Card className="w-full max-w-md shadow-2xl">
@@ -19,19 +24,51 @@ export const LoginPage = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6">
-            <div className="space-y-2">
-              <Input placeholder="correo@gmail.com" />
-            </div>
-            <div className="space-y-2">
-              <Input placeholder="*****" type="password"/>
-            </div>
-            
-            <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.02] disabled:scale-100 disabled:opacity-70">
-              Iniciar sesión
-            </Button>
+          <Form {...form}>
+            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit,onError)}>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormControl>
+                        <Input placeholder="prueba@gmail.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+              <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Contraseña</FormLabel>
+                      <FormControl>
+                        <Input placeholder="*****" type="password" {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+              </div>
+              
+              <Button 
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.02] disabled:scale-100 disabled:opacity-70"
+                disabled={loginMutation.isPending}
+              >
+                {
+                  loginMutation.isPending ? "Cargando..." : "Iniciar sesión"
+                }
+              </Button>
 
-          </form>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
