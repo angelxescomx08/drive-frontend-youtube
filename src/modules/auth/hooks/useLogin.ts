@@ -15,7 +15,11 @@ export const useLogin = () => {
   })
 
   const loginMutation = useMutation({
-    mutationFn: login,
+    mutationFn: async (data: Login) => {
+      const response = await login(data);
+      localStorage.setItem("token", response.token);
+      return response;
+    },
     onSuccess: (data) => {
       console.log(data)
     },

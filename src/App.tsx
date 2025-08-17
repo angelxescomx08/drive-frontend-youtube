@@ -9,6 +9,9 @@ import {
   RouterProvider,
 } from "react-router";
 import { LoginPage } from './pages/(public)/LoginPage';
+import { useEffect } from 'react';
+import { getMe } from './modules/auth/actions/authActions';
+import { useAuthStore } from './modules/auth/hooks/useAuthStore';
 
 const router = createBrowserRouter([
   {
@@ -16,12 +19,26 @@ const router = createBrowserRouter([
     element: <LoginPage/>,
   },
   {
-    path: "/about",
-    element: <div>About</div>
+    path: "/dashboard",
+    element: <div>Dashboard</div>
   }
 ]);
 
 function App() {
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if(token){
+      getMe()
+        .then(user=>{
+          useAuthStore.getState().setUser(user);
+        })
+        .catch(_error=>{
+          useAuthStore.getState().setUser(null);
+          console.error(_error)
+        })
+    }
+  },[])
 
   return (
     <QueryClientProvider client={queryClient}>

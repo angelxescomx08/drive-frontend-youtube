@@ -12,3 +12,13 @@ export async function login(loginData: Login) {
   const { data } = await api.post<LoginResponse>("/user/login", loginData);
   return data;
 }
+
+type GetMeResponse = {
+  message: string;
+  user: User;
+}
+
+export async function getMe() {
+  const { data } = await api.get<GetMeResponse>("/user/me");
+  return data.user;
+}
