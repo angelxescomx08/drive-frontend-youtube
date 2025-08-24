@@ -1,6 +1,7 @@
 import { api } from "@/lib/api";
 import type { Login } from "../schemas/authSchema";
 import type { User } from "@/modules/users/schemas/usersSchema";
+import { useAuthStore } from "../hooks/useAuthStore";
 
 type LoginResponse = {
   message: string;
@@ -21,4 +22,9 @@ type GetMeResponse = {
 export async function getMe() {
   const { data } = await api.get<GetMeResponse>("/user/me");
   return data.user;
+}
+
+export function logOut() {
+  localStorage.removeItem("token");
+  useAuthStore.getState().setUser(null);
 }

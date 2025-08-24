@@ -3,11 +3,12 @@ import { loginSchema, type Login } from "../schemas/authSchema"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../actions/authActions";
-import { useNavigate } from "react-router";
+import { useAuthStore } from "./useAuthStore";
+import { toast } from "sonner";
 
 export const useLogin = () => {
 
-  const navigate = useNavigate();
+  const { setUser } = useAuthStore();
 
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
@@ -21,14 +22,17 @@ export const useLogin = () => {
     mutationFn: async (data: Login) => {
       const response = await login(data);
       localStorage.setItem("token", response.token);
-      navigate("/dashboard");
+      setUser(response.user);
+
       return response;
     },
     onSuccess: (data) => {
       console.log(data)
+      toast.success("Bienvenido");
     },
     onError: (error) => {
-      console.error(error)
+      console.error(error);
+      toast.error("Error al iniciar sesión");
     }
   })
 

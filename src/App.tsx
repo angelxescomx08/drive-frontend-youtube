@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { getMe } from './modules/auth/actions/authActions';
 import { useAuthStore } from './modules/auth/hooks/useAuthStore';
 import { router } from './routes/routes';
+import { Toaster } from "@/components/ui/sonner"
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />,
       <ReactQueryDevtools initialIsOpen={false} />
+      <Toaster />
     </QueryClientProvider>
   )
 }
