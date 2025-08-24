@@ -17,8 +17,8 @@ api.interceptors.response.use(
   response => response,
   error => {
     if (
-      error.response.status === 401 &&
-      error.response.data.error === "Not valid token"
+      error?.response?.status === 401 &&
+      error?.response?.data?.error === "Not valid token"
     ) {
       localStorage.removeItem("token");
       useAuthStore.getState().setUser(null);

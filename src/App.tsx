@@ -5,24 +5,12 @@ import {
 import { queryClient } from './lib/queryClient'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
-  createBrowserRouter,
   RouterProvider,
 } from "react-router";
-import { LoginPage } from './pages/(public)/LoginPage';
 import { useEffect } from 'react';
 import { getMe } from './modules/auth/actions/authActions';
 import { useAuthStore } from './modules/auth/hooks/useAuthStore';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <LoginPage/>,
-  },
-  {
-    path: "/dashboard",
-    element: <div>Dashboard</div>
-  }
-]);
+import { router } from './routes/routes';
 
 function App() {
 
