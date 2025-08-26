@@ -3,6 +3,7 @@ import { LoginPage } from '../pages/(public)/LoginPage';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';
 import { DashboardPage } from '@/pages/(private)/Dashboard';
+import { RegisterPage } from '@/pages/(public)/RegisterPage';
 
 export const router = createBrowserRouter([
   {
@@ -16,5 +17,11 @@ export const router = createBrowserRouter([
     element: <PrivateRoute>
       <DashboardPage />
     </PrivateRoute>
+  },
+  {
+    path: "/register",
+    element: <PublicRoute>
+      <RegisterPage />
+    </PublicRoute>
   }
 ]);

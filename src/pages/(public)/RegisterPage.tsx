@@ -6,7 +6,7 @@ import { useLogin } from "@/modules/auth/hooks/useLogin"
 import { LogIn } from "lucide-react"
 import { Link } from "react-router"
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
 
   const { form, loginMutation, onSubmit, onError } = useLogin()
 
@@ -18,10 +18,10 @@ export const LoginPage = () => {
             <LogIn className="text-white w-8 h-8" />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-800">
-            Iniciar sesión
+            Registrate
           </CardTitle>
           <CardDescription className="text-gray-600">
-            Ingrese sus credenciales para acceder a su cuenta
+            Ingresa datos necesarios para crear cuenta
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -58,23 +58,40 @@ export const LoginPage = () => {
                 />
                 
               </div>
+
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Repite tu contraseña</FormLabel>
+                      <FormControl>
+                        <Input placeholder="*****" type="password" {...field}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+              </div>
               
               <Button 
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.02] disabled:scale-100 disabled:opacity-70"
                 disabled={loginMutation.isPending}
               >
                 {
-                  loginMutation.isPending ? "Cargando..." : "Iniciar sesión"
+                  loginMutation.isPending ? "Cargando..." : "Registrase"
                 }
               </Button>
 
               <div className='text-center text-sm text-gray-600'>
-                ¿Aún no tienes una cuenta?{' '}
+                ¿Ya tenías una cuenta?{' '}
                 <Link
-                  to='/register'
+                  to='/'
                   className='text-blue-600 hover:text-blue-800 font-medium transition-colors'
                 >
-                  Registrate aquí
+                  Inicia sesión aquí
                 </Link>
               </div>
 
