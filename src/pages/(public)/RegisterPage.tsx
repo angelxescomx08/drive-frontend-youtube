@@ -2,13 +2,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useLogin } from "@/modules/auth/hooks/useLogin"
+import { useRegister } from "@/modules/auth/hooks/useRegister"
 import { LogIn } from "lucide-react"
 import { Link } from "react-router"
 
 export const RegisterPage = () => {
 
-  const { form, loginMutation, onSubmit, onError } = useLogin()
+  const { form, registerMutation, onSubmit, onError } = useRegister()
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -62,7 +62,7 @@ export const RegisterPage = () => {
               <div className="space-y-2">
                 <FormField
                   control={form.control}
-                  name="password"
+                  name="repeatPassword"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Repite tu contraseña</FormLabel>
@@ -78,10 +78,10 @@ export const RegisterPage = () => {
               
               <Button 
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.02] disabled:scale-100 disabled:opacity-70"
-                disabled={loginMutation.isPending}
+                disabled={registerMutation.isPending}
               >
                 {
-                  loginMutation.isPending ? "Cargando..." : "Registrase"
+                  registerMutation.isPending ? "Cargando..." : "Registrase"
                 }
               </Button>
 
