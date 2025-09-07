@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../actions/authActions";
 import { useAuthStore } from "./useAuthStore";
 import { toast } from "sonner";
+import { showError } from "@/lib/showError";
 
 export const useLogin = () => {
 
@@ -30,10 +31,7 @@ export const useLogin = () => {
       console.log(data)
       toast.success("Bienvenido");
     },
-    onError: (error) => {
-      console.error(error);
-      toast.error("Error al iniciar sesión");
-    }
+    onError: (error) => showError(error)
   })
 
   const onSubmit = (data: Login) => loginMutation.mutate(data)
