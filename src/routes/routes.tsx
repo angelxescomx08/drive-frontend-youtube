@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
     </PublicRoute>,
   },
   {
-    path: "/dashboard",
+    path: "/dashboard/:id_folder",
     element: <PrivateRoute>
       <DashboardPage />
     </PrivateRoute>

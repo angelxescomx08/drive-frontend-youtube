@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { logOut } from "@/modules/auth/actions/authActions";
 import { useFolderContent } from "@/modules/folders/hooks/useFolderContent";
+import { useParams } from "react-router";
 
 export function DashboardPage(){
 
-  const { folderContent } = useFolderContent("root")
+  const { id_folder = "root" } = useParams()
+
+  const { folderContent } = useFolderContent(id_folder)
 
   return (
     <main className="container mx-auto">
