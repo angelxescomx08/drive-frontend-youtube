@@ -3,6 +3,7 @@ import { logOut } from "@/modules/auth/actions/authActions";
 import { FileComponent } from "@/modules/files/components/FileComponent";
 import { FolderComponent } from "@/modules/folders/components/FolderComponent";
 import { useFolderContent } from "@/modules/folders/hooks/useFolderContent";
+import { Dropzone } from "@/shared/components/Dropzone";
 import { useParams } from "react-router";
 
 export function DashboardPage(){
@@ -13,7 +14,7 @@ export function DashboardPage(){
 
   return (
     <main className="container mx-auto">
-      <div className="w-full h-[calc(100vh-8rem)] border rounded-md shadow-lg flex gap-4 p-4 items-start justify-start flex-wrap">
+      <Dropzone>
         {
           folderContent.data?.folders.map(folder => (
             <FolderComponent key={folder.id_folder} folder={folder} />
@@ -25,7 +26,8 @@ export function DashboardPage(){
             <FileComponent key={file.id_file} file={file} />
           ))
         }
-      </div>
+      </Dropzone>
+      
 
       <Button
         onClick={logOut}
