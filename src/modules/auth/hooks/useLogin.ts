@@ -4,8 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../actions/authActions";
 import { useAuthStore } from "./useAuthStore";
-import { toast } from "sonner";
-import { showError } from "@/lib/showError";
 
 export const useLogin = () => {
 
@@ -27,11 +25,6 @@ export const useLogin = () => {
 
       return response;
     },
-    onSuccess: (data) => {
-      console.log(data)
-      toast.success("Bienvenido");
-    },
-    onError: (error) => showError(error)
   })
 
   const onSubmit = (data: Login) => loginMutation.mutate(data)

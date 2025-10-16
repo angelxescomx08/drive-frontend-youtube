@@ -7,9 +7,6 @@ export function useFolderContent(id_folder: string) {
       id_folder
     }],
     queryFn: () => getFolderContent(id_folder),
-    retry: true,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false
   })
 
   return {

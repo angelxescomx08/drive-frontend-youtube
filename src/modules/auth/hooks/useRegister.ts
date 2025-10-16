@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from "@tanstack/react-query";
 import { register } from "../actions/authActions";
 import { toast } from "sonner";
-import { showError } from "@/lib/showError";
 
 export const useRegister = () => {
 
@@ -23,11 +22,6 @@ export const useRegister = () => {
 
       return response;
     },
-    onSuccess: (data) => {
-      console.log(data)
-      toast.success("Se ha creado el usuario");
-    },
-    onError: (error) => showError(error)
   })
 
   const onSubmit = (data: Register) => registerMutation.mutate(data)
