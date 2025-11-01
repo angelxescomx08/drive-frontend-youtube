@@ -8,6 +8,7 @@ import type { DragEvent } from "react";
 import { useParams } from "react-router";
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useCreateFile } from "@/modules/files/hooks/useCreateFile";
 
 export function DashboardPage(){
 
@@ -15,6 +16,7 @@ export function DashboardPage(){
 
   const { folderContent } = useFolderContent(id_folder)
   const { createFolderMutation } = useCreateFolder()
+  const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore()
 
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
@@ -24,13 +26,15 @@ export function DashboardPage(){
         const item = e.dataTransfer.items[i];
         if(item.webkitGetAsEntry()){
           const entry = item.webkitGetAsEntry();
-          console.log(entry)
           if(entry?.isFile){
-            console.log("Es archivo")
             const file = await new Promise<File>(resolve => {
               (entry as FileSystemFileEntry).file(file => resolve(file))
             })
-            console.log(file)
+            createFileMutation.mutate({
+              file_name: entry.name,
+              id_folder: id_folder === "root" ? "null" : id_folder,
+              file
+            })
           }
           if(entry?.isDirectory){
             createFolderMutation.mutate({
