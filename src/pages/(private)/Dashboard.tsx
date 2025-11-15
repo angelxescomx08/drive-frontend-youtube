@@ -4,11 +4,12 @@ import { FileComponent } from "@/modules/files/components/FileComponent";
 import { FolderComponent } from "@/modules/folders/components/FolderComponent";
 import { useFolderContent } from "@/modules/folders/hooks/useFolderContent";
 import { Dropzone } from "@/shared/components/Dropzone";
-import type { DragEvent } from "react";
+import { useMemo, useState, type DragEvent } from "react";
 import { useParams } from "react-router";
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useCreateFile } from "@/modules/files/hooks/useCreateFile";
+import { Header } from "@/shared/components/Header";
 
 export function DashboardPage(){
 
@@ -18,6 +19,7 @@ export function DashboardPage(){
   const { createFolderMutation } = useCreateFolder()
   const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore()
+  const [search,setSearch] = useState("");
 
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -48,28 +50,43 @@ export function DashboardPage(){
     }
   }
 
+  const folders = useMemo(()=>{
+    return folderContent.data?.folders.filter(folder=>
+      folder.folder_name.toLowerCase().includes(search.toLowerCase())
+    )
+  },[folderContent.data?.folders, search])
+
+  const files = useMemo(()=>{
+    return folderContent.data?.files.filter(file=>
+      file.file_name.toLowerCase().includes(search.toLowerCase())
+    )
+  },[folderContent.data?.files, search])
+
   return (
-    <main className="container mx-auto">
-      <Dropzone
-        onDrop={onDrop}
-      >
-        {
-          folderContent.data?.folders.map(folder => (
-            <FolderComponent key={folder.id_folder} folder={folder} />
-          ))
-        }
+    <>
+      <Header onSearch={(search)=>setSearch(search)} />
+      <main className="container mx-auto">
+        <Dropzone
+          onDrop={onDrop}
+        >
+          {
+            folders?.map(folder => (
+              <FolderComponent key={folder.id_folder} folder={folder} />
+            ))
+          }
 
-        {
-          folderContent.data?.files.map(file => (
-            <FileComponent key={file.id_file} file={file} />
-          ))
-        }
-      </Dropzone>
-      
+          {
+            files?.map(file => (
+              <FileComponent key={file.id_file} file={file} />
+            ))
+          }
+        </Dropzone>
+        
 
-      <Button
-        onClick={logOut}
-      >Cerrar sesión</Button>
-    </main>
+        <Button
+          onClick={logOut}
+        >Cerrar sesión</Button>
+      </main>
+    </>
   )
 }
