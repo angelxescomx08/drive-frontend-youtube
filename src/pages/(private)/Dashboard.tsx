@@ -5,11 +5,12 @@ import { FolderComponent } from "@/modules/folders/components/FolderComponent";
 import { useFolderContent } from "@/modules/folders/hooks/useFolderContent";
 import { Dropzone } from "@/shared/components/Dropzone";
 import { useMemo, useState, type DragEvent } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useCreateFile } from "@/modules/files/hooks/useCreateFile";
 import { Header } from "@/shared/components/Header";
+import { BreadcrumbComponent } from "@/shared/components/BreadcrumCustom";
 
 export function DashboardPage(){
 
@@ -20,6 +21,8 @@ export function DashboardPage(){
   const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore()
   const [search,setSearch] = useState("");
+
+  const navigate = useNavigate()
 
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -65,13 +68,23 @@ export function DashboardPage(){
   return (
     <>
       <Header onSearch={(search)=>setSearch(search)} />
+      <BreadcrumbComponent
+        paths={folderContent.data?.paths?.path.split('/').filter(Boolean) ?? []}
+        ids={folderContent.data?.paths?.ids.split('/').filter(Boolean) ?? []}
+        itemsToDisplay={3}
+        onClick={(id) => {
+          navigate(`/dashboard/${id}`);
+        }}
+      />
       <main className="container mx-auto">
         <Dropzone
           onDrop={onDrop}
         >
           {
             folders?.map(folder => (
-              <FolderComponent key={folder.id_folder} folder={folder} />
+              <FolderComponent key={folder.id_folder} folder={folder} onDoubleClick={(f)=>{
+                navigate(`/dashboard/${f.id_folder}`);
+              }}/>
             ))
           }
 
