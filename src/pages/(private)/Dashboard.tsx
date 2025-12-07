@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { logOut } from "@/modules/auth/actions/authActions";
 import { FileComponent } from "@/modules/files/components/FileComponent";
 import { FolderComponent } from "@/modules/folders/components/FolderComponent";
 import { useFolderContent } from "@/modules/folders/hooks/useFolderContent";
@@ -21,6 +19,10 @@ export function DashboardPage(){
   const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore()
   const [search,setSearch] = useState("");
+  const [selectedItems,setSelectedItems] = useState<{
+    type: "file" | "folder";
+    id: string;
+  }[]>([])
 
   const navigate = useNavigate()
 
@@ -82,23 +84,53 @@ export function DashboardPage(){
         >
           {
             folders?.map(folder => (
-              <FolderComponent key={folder.id_folder} folder={folder} onDoubleClick={(f)=>{
-                navigate(`/dashboard/${f.id_folder}`);
-              }}/>
+              <FolderComponent 
+                key={folder.id_folder} 
+                folder={folder} 
+                isSelected={selectedItems.some(item => item.id === folder.id_folder)}
+                onDoubleClick={(f)=>{
+                  navigate(`/dashboard/${f.id_folder}`);
+                }}
+                onClick={(e)=>{
+                  if(!e.ctrlKey && !e.shiftKey)return;
+
+                  setSelectedItems(prev=>{
+                    const exists = prev.some(item => item.id === folder.id_folder);
+
+                    if(exists){
+                      return prev.filter(item => (item.id !== folder.id_folder))
+                    }
+
+                    return [...prev, {type: "folder", id: folder.id_folder}]
+                  })
+                }}
+              />
             ))
           }
 
           {
             files?.map(file => (
-              <FileComponent key={file.id_file} file={file} />
+              <FileComponent 
+                key={file.id_file} 
+                file={file} 
+                isSelected={selectedItems.some(item => item.id === file.id_file)}
+                onClick={(e)=>{
+                  if(!e.ctrlKey && !e.shiftKey)return;
+
+                  setSelectedItems(prev=>{
+                    const exists = prev.some(item => item.id === file.id_file);
+
+                    if(exists){
+                      return prev.filter(item => (item.id !== file.id_file))
+                    }
+
+                    return [...prev, {type: "file", id: file.id_file}]
+                  })
+                }}
+              />
             ))
           }
         </Dropzone>
-        
-
-        <Button
-          onClick={logOut}
-        >Cerrar sesión</Button>
       </main>
     </>
   )
