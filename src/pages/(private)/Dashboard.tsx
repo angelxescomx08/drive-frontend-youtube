@@ -9,6 +9,7 @@ import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useCreateFile } from "@/modules/files/hooks/useCreateFile";
 import { Header } from "@/shared/components/Header";
 import { BreadcrumbComponent } from "@/shared/components/BreadcrumCustom";
+import { CustomContextMenu } from "@/shared/components/CustomContextMenu";
 
 export function DashboardPage(){
 
@@ -79,58 +80,60 @@ export function DashboardPage(){
         }}
       />
       <main className="container mx-auto">
-        <Dropzone
-          onDrop={onDrop}
-        >
-          {
-            folders?.map(folder => (
-              <FolderComponent 
-                key={folder.id_folder} 
-                folder={folder} 
-                isSelected={selectedItems.some(item => item.id === folder.id_folder)}
-                onDoubleClick={(f)=>{
-                  navigate(`/dashboard/${f.id_folder}`);
-                }}
-                onClick={(e)=>{
-                  if(!e.ctrlKey && !e.shiftKey)return;
+        <CustomContextMenu>
+          <Dropzone
+            onDrop={onDrop}
+          >
+            {
+              folders?.map(folder => (
+                <FolderComponent 
+                  key={folder.id_folder} 
+                  folder={folder} 
+                  isSelected={selectedItems.some(item => item.id === folder.id_folder)}
+                  onDoubleClick={(f)=>{
+                    navigate(`/dashboard/${f.id_folder}`);
+                  }}
+                  onClick={(e)=>{
+                    if(!e.ctrlKey && !e.shiftKey)return;
 
-                  setSelectedItems(prev=>{
-                    const exists = prev.some(item => item.id === folder.id_folder);
+                    setSelectedItems(prev=>{
+                      const exists = prev.some(item => item.id === folder.id_folder);
 
-                    if(exists){
-                      return prev.filter(item => (item.id !== folder.id_folder))
-                    }
+                      if(exists){
+                        return prev.filter(item => (item.id !== folder.id_folder))
+                      }
 
-                    return [...prev, {type: "folder", id: folder.id_folder}]
-                  })
-                }}
-              />
-            ))
-          }
+                      return [...prev, {type: "folder", id: folder.id_folder}]
+                    })
+                  }}
+                />
+              ))
+            }
 
-          {
-            files?.map(file => (
-              <FileComponent 
-                key={file.id_file} 
-                file={file} 
-                isSelected={selectedItems.some(item => item.id === file.id_file)}
-                onClick={(e)=>{
-                  if(!e.ctrlKey && !e.shiftKey)return;
+            {
+              files?.map(file => (
+                <FileComponent 
+                  key={file.id_file} 
+                  file={file} 
+                  isSelected={selectedItems.some(item => item.id === file.id_file)}
+                  onClick={(e)=>{
+                    if(!e.ctrlKey && !e.shiftKey)return;
 
-                  setSelectedItems(prev=>{
-                    const exists = prev.some(item => item.id === file.id_file);
+                    setSelectedItems(prev=>{
+                      const exists = prev.some(item => item.id === file.id_file);
 
-                    if(exists){
-                      return prev.filter(item => (item.id !== file.id_file))
-                    }
+                      if(exists){
+                        return prev.filter(item => (item.id !== file.id_file))
+                      }
 
-                    return [...prev, {type: "file", id: file.id_file}]
-                  })
-                }}
-              />
-            ))
-          }
-        </Dropzone>
+                      return [...prev, {type: "file", id: file.id_file}]
+                    })
+                  }}
+                />
+              ))
+            }
+          </Dropzone>
+        </CustomContextMenu>
       </main>
     </>
   )
