@@ -10,6 +10,7 @@ import { useCreateFile } from "@/modules/files/hooks/useCreateFile";
 import { Header } from "@/shared/components/Header";
 import { BreadcrumbComponent } from "@/shared/components/BreadcrumCustom";
 import { CustomContextMenu } from "@/shared/components/CustomContextMenu";
+import { downloadFile } from "@/utils/downloadFile";
 
 export function DashboardPage(){
 
@@ -80,7 +81,21 @@ export function DashboardPage(){
         }}
       />
       <main className="container mx-auto">
-        <CustomContextMenu>
+        <CustomContextMenu
+          onDownloadFile={()=>{
+            selectedItems.forEach(item => {
+              if(item.type === "file"){
+                const file = folderContent.data?.files.find(
+                  file => file.id_file === item.id
+                )
+                if(file){
+                  downloadFile(file);
+                }
+              }
+            })
+            setSelectedItems([]);
+          }}
+        >
           <Dropzone
             onDrop={onDrop}
           >
