@@ -11,6 +11,8 @@ import { Header } from "@/shared/components/Header";
 import { BreadcrumbComponent } from "@/shared/components/BreadcrumCustom";
 import { CustomContextMenu } from "@/shared/components/CustomContextMenu";
 import { downloadFile } from "@/utils/downloadFile";
+import { useDeleteFile } from "@/modules/files/hooks/useDeleteFile";
+import { useDeleteFolder } from "@/modules/folders/hooks/useDeleteFolder";
 
 export function DashboardPage(){
 
@@ -19,6 +21,8 @@ export function DashboardPage(){
   const { folderContent } = useFolderContent(id_folder)
   const { createFolderMutation } = useCreateFolder()
   const { createFileMutation } = useCreateFile();
+  const { deleteFileMutation } = useDeleteFile();
+  const { deleteFolderMutation } = useDeleteFolder();
   const { user } = useAuthStore()
   const [search,setSearch] = useState("");
   const [selectedItems,setSelectedItems] = useState<{
@@ -93,6 +97,19 @@ export function DashboardPage(){
                 }
               }
             })
+            setSelectedItems([]);
+          }}
+          onDelete={async ()=>{
+            await Promise.all(
+              selectedItems.map(item =>{
+                if(item.type === "file"){
+                  return deleteFileMutation.mutateAsync(item.id);
+                }
+                if(item.type === "folder"){
+                  return deleteFolderMutation.mutateAsync(item.id);
+                }
+              })
+            )
             setSelectedItems([]);
           }}
         >

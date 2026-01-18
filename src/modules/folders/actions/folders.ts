@@ -21,3 +21,8 @@ export async function createFolder(folder: CreateFolder) {
   const response = await api.post("/folder", folder);
   return response.data;
 }
+
+export async function deleteFolder(id_folder: string) {
+  const { data } = await api.delete(`/folder/${id_folder}`);
+  return data;
+}
